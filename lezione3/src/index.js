@@ -1,7 +1,9 @@
 //l'entrypoint è il file chiamato "index.js"
 
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
+import "./index.css";
+
 const pizzaData = [
   {
     name: "Focaccia",
@@ -52,18 +54,68 @@ function App() {
     //per poter mettere più elementi html tutto deve essere messo
     //tra tag <> </>
     <>
-      <img src="pizzas/spinaci.jpg" alt="Pizza spinaci"></img>
-      <h1>Hello React</h1>
-      <p>React Bello</p>
-      <Pizza />
+      <div className="container">
+        <Header />
+        <Menu />
+        <Footer />
+      </div>
     </>
   );
 }
 
-function Pizza() {
+function Header() {
+  //const style = { color: "red", fontSize: "40px", textTransform: "uppercase" };
+  const style = {};
+  return (
+    <header style={style} className="header footer">
+      <h1>Fast React Pizza Co.</h1>
+    </header>
+  );
+}
+
+function Menu() {
   return (
     <>
-      <h2>Pizza</h2>
+      <main className="menu">
+        <h2>Our menu</h2>
+        <ul className="pizzas">
+          {pizzaData.map((element) => (
+            <Pizza
+              key={element.name}
+              name={element.name}
+              ingredients={element.ingredients}
+              price={element.price}
+              photoName={element.photoName}
+            />
+          ))}
+        </ul>
+      </main>
+    </>
+  );
+}
+
+function Footer() {
+  const hour = new Date().getHours();
+
+  const openHour = 12;
+  const closeHour = 22;
+  const isOpen = hour >= openHour && hour <= closeHour;
+
+  return (
+    <footer className="footer">
+      {new Date().toLocaleTimeString()}We're currently Open!
+    </footer>
+  );
+}
+
+function Pizza(props) {
+  return (
+    <>
+      <li>
+        <img src={props.photoName} alt={props.name}></img>
+        <h3>{props.name}</h3>
+        <p>{props.ingredients}</p>
+      </li>
     </>
   );
 }
