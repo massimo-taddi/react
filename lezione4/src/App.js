@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const messages = [
   "Learn React ⚛️",
   "Apply for jobs 💼",
@@ -13,7 +15,8 @@ export default function App() {
   State allows us to rerender a component
 
   */
-  let step = 1;
+  const [step, setStep] = useState(1);
+
   return (
     <div className="steps">
       <div className="numbers">
@@ -28,7 +31,7 @@ export default function App() {
         <button
           style={{ backgroundColor: "#7950f2", color: "#fff" }}
           onClick={function Previous() {
-            step--;
+            if (step > 1) setStep(step - 1);
           }}
         >
           Previous
@@ -36,7 +39,7 @@ export default function App() {
         <button
           style={{ backgroundColor: "#7950f2", color: "#fff" }}
           onClick={function Next() {
-            step++;
+            if (step < 3) setStep(step + 1);
           }}
         >
           Next
