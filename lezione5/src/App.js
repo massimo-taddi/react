@@ -21,22 +21,34 @@ function Logo() {
   return <h1>Far Away</h1>;
 }
 
-function Form() {
-  const [desc, setDesc] = useState("Test");
+function Form({ addItem }) {
+  const [desc, setDesc] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [items, setItems] = useState([]);
 
+  function HandleItems(item) {
+    setItems((item) => [...items, item]);
+  }
   function handleSubmit(e) {
     e.preventDefault();
+    const newItem = {
+      description: desc,
+      quantity: quantity,
+      packed: false,
+      id: Date.now(),
+    };
+
+    setDesc("");
+    setQuantity(1);
   }
 
-  const newItem = { desc, quantity, packed: false, id: Date.now() };
-
-  setDesc("");
-  setQuantity(1);
   return (
     <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you need for your trip?</h3>
-      <select value={quantity} onChange={(e) => setQuantity(e.target.value)}>
+      <select
+        value={quantity}
+        onChange={(e) => setQuantity(Number(e.target.value))}
+      >
         {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
           <option value={num} key={num}>
             {num}
@@ -49,7 +61,7 @@ function Form() {
         value={desc}
         onChange={(e) => setDesc(e.target.value)}
       />
-      <button>Add</button>
+      <button type="submit">Add</button>
     </form>
   );
 }
