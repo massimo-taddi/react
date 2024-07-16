@@ -7,11 +7,23 @@ const initialItems = [
 ];
 
 export default function App() {
+  const [items, setItems] = useState([...initialItems]);
+
+  function HandleItems(item) {
+    setItems((item) => [...items, item]);
+  }
+
+  function HandleDeleteItem(id) {
+    //crea un array nuovo, che inserisce tutti gli item
+    //che non hanno l`id specificato
+    setItems((item) => items.filter((item) => item.id !== id));
+  }
+
   return (
     <div className="app">
       <Logo />
-      <Form />
-      <PackingList />
+      <Form onAddItems={HandleItems} />
+      <PackingList items={items} onDeleteItem={HandleDeleteItem} />
       <Stats />
     </div>
   );
@@ -21,14 +33,10 @@ function Logo() {
   return <h1>Far Away</h1>;
 }
 
-function Form({ addItem }) {
+function Form({ onAddItems }) {
   const [desc, setDesc] = useState("");
   const [quantity, setQuantity] = useState(1);
-  const [items, setItems] = useState([]);
 
-  function HandleItems(item) {
-    setItems((item) => [...items, item]);
-  }
   function handleSubmit(e) {
     e.preventDefault();
     const newItem = {
@@ -37,7 +45,8 @@ function Form({ addItem }) {
       packed: false,
       id: Date.now(),
     };
-
+    console.log(newItem);
+    onAddItems(newItem);
     setDesc("");
     setQuantity(1);
   }
@@ -66,28 +75,27 @@ function Form({ addItem }) {
   );
 }
 
-function PackingList() {
+function PackingList({ items, onDeleteItem }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map((item) => (
-          <Item item={item} key={item.id} />
+        {items.map((item) => (
+          <Item item={item} key={item.id} onDeleteItem={onDeleteItem} />
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item }) {
+function Item({ item, onDeleteItem }) {
   return (
     <li>
       <span style={item.packed ? { textDecoration: "line-through" } : {}}>
         {item.quantity}
         {item.description}
       </span>
-      <span>
-        <button>X</button>
-      </span>
+
+      <button onClick={() => onDeleteItem(item.id)}>X</button>
     </li>
   );
 }
